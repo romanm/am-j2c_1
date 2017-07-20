@@ -11,25 +11,29 @@
 	<div class="w3-container">
 		<h1>AM j2C_1</h1>
 		<div class="w3-row-padding">
-			<div class="w3-quarter ">
-				<div class="w3-card-2">1</div>
+			<div class="w3-third ">
+				<div class="w3-card-2">
+					<div ng-include="'/f/j2c/tables.html'"></div>
+				</div>
 			</div>
-			<div class="w3-quarter ">
-				<div class="w3-card-2">1</div>
+			<div class="w3-third ">
+				<div class="w3-card-2">
+					<div ng-include="'/f/j2c/table.html'"></div>
+				</div>
 			</div>
-			<div class="w3-quarter ">
-				<div class="w3-card-2">1</div>
-			</div>
-			<div class="w3-quarter ">
-				<div class="w3-card-2">1</div>
+			<div class="w3-third ">
+				<div class="w3-card-2">
+					<div ng-include="'/f/j2c/tableSelect.html'"></div>
+				</div>
 			</div>
 		</div>
-
+<!-- 
 		<div>
 			First Name: <input type="text" ng-model="firstName"><br>
 			Last Name: <input type="text" ng-model="lastName"><br> <br>
 			Full Name: {{firstName + " " + lastName}}
 		</div>
+ -->
 
 	</div>
 

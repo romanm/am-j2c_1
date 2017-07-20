@@ -1,0 +1,18 @@
+<table>
+	<tr class="w3-tiny w3-gray">
+		<th ng-repeat="c in tableSelect.joinColumnsSelect">{{c.col_alias}}</th>
+	</tr>
+	<!-- 
+	<tr class="w3-tiny w3-gray">
+		<th ng-repeat="(k,v) in tableSelect.col_alias">
+		{{v}}</th>
+	</tr>
+	 -->
+	<tr ng-repeat="r in tableSelect.tableSelect">
+		<td ng-repeat="(k,v) in tableSelect.col_alias">{{r['col_'+k]}}</td>
+		<!-- 
+		<td>{{r.fieldtype}}</td>
+		<td>{{r}}</td>
+		 -->
+	</tr>
+</table>

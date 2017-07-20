@@ -1,0 +1,15 @@
+<table>
+	<tr class="w3-tiny w3-gray">
+		<th ng-repeat="(k,v) in tableTable">{{v}}</th>
+	</tr>
+	<tr ng-repeat="r in createTableSelect.createTableSelect">
+		<td><span
+			ng-if="createTableSelect.createTableSelect[$index - 1 ].tablename!=r.tablename">
+				{{r.tablename}} </span></td>
+		<td>{{r.fieldname}}</td>
+		<td>{{r.fieldtype}}</td>
+		<!-- 
+		<td>{{r}}</td>
+		 -->
+	</tr>
+</table>
