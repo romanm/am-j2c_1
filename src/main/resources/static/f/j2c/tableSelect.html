@@ -2,17 +2,15 @@
 	<tr class="w3-tiny w3-gray">
 		<th ng-repeat="c in tableSelect.joinColumnsSelect">{{c.col_alias}}</th>
 	</tr>
-	<!-- 
-	<tr class="w3-tiny w3-gray">
-		<th ng-repeat="(k,v) in tableSelect.col_alias">
-		{{v}}</th>
-	</tr>
-	 -->
 	<tr ng-repeat="r in tableSelect.tableSelect">
-		<td ng-repeat="(k,v) in tableSelect.col_alias">{{r['col_'+k]}}</td>
-		<!-- 
-		<td>{{r.fieldtype}}</td>
-		<td>{{r}}</td>
-		 -->
+		<td ng-repeat="(k,v) in tableSelect.col_alias"
+			ng-click="j2C.tableSelect.td.click(r,k)"
+			class="w3-border w3-border-white w3-hover-border-gray">
+			<span ng-if="!j2C.tableSelect.td.isInEdit(r,k)"> {{r['col_'+k]}}</span> 
+			<input 
+			ng-if="j2C.tableSelect.td.isInEdit(r,k)" class="w3-border"
+			style="width:100%"
+			ng-model="r['col_'+k]" ng-change="j2C.tableSelect.td.click(r,k)">
+		</td>
 	</tr>
 </table>

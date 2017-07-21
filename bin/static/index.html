@@ -34,7 +34,16 @@
 			Full Name: {{firstName + " " + lastName}}
 		</div>
  -->
-
+		<div>
+			<header class="w3-tiny w3-light-gray"> дерево задач конфігуратора
+			</header>
+			<div ng-repeat="(k,v) in j2C.treeObjConfig">
+				<div class="w3-hover-gray" ng-click="v.open=!v.open">{{k}}:</div>
+				<div ng-if="v.open" ng-repeat="(k2,v2) in v">
+					<div ng-if="k2!='open'" class="w3-hover-gray">- {{k2}}</div>
+				</div>
+			</div>
+		</div>
 	</div>
 
 </body>
