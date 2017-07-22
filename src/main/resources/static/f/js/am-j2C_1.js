@@ -47,7 +47,7 @@ function initI2c($scope, $http, $timeout){
 				}, this.autoSaveTextTypingPause);
 			}
 			,fn_httpSave:function(){
-				$http.post('/r/table/save', this.data).then(function(response) {
+				$http.post('/r/table/save', {data:this.data, col_alias:$scope.tableSelect.col_alias}).then(function(response) {
 					console.log('/r/table/save');
 					console.log(response.data);
 				});
@@ -59,18 +59,23 @@ function initI2c($scope, $http, $timeout){
 					&& !!$scope.j2C.tableSelect.historyEditTable.data[r.row_id][k];
 				return isInEdit;
 			}
+			,change:function(r,k){
+				$scope.j2C.tableSelect.historyEditTable.data[r.row_id][k].value 
+					= r['col_'+k];
+			}
 			,click:function(r,k){
 				if($scope.j2C.tableSelect.historyEditTable){
 					if(!$scope.j2C.tableSelect.historyEditTable.data[r.row_id])
 						$scope.j2C.tableSelect.historyEditTable.data[r.row_id]={};
-					$scope.j2C.tableSelect.historyEditTable.data[r.row_id][k]=r['col_'+k];
+					$scope.j2C.tableSelect.historyEditTable.data[r.row_id][k] 
+						= {oldValue:r['col_'+k], id:r['col_'+k+'_id']};
 					$scope.j2C.tableSelect.historyEditTable.add();
 				}
 			}
 		}
 	}
-	
 }
+
 var app = angular.module('j2CApp', []);
 app.controller('J2CCtrl', function($scope, $http, $timeout) {
 	initI2c($scope, $http, $timeout);
