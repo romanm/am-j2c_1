@@ -3,7 +3,6 @@ package com.algoritmed.j2c.amj2c_1;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +20,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class DbRest {
 	private static final Logger logger = LoggerFactory.getLogger(DbRest.class);
 
+	private @Value("${sql.integer.update}") String sqlIntegerUpdate;
+	private @Value("${sql.string.update}") String sqlStringUpdate;
 	@PostMapping("/r/table/save")
 	public @ResponseBody Map<String, Object> tableSave(
 			@RequestBody Map<String, Object> dbSaveObj
@@ -35,11 +36,23 @@ public class DbRest {
 			Map map = (Map) data.get(k);
 			for (Object k2 : map.keySet()) {
 				System.err.println(k2);
-				Map map2 = (Map) map.get(k2);
-				Object value = map2.get("value");
-				if(value!=null && !value.equals(map2.get("oldValue"))){
-					System.err.println(map2);
-					System.err.println(col_alias.get(k2));
+				Map dataMap = (Map) map.get(k2);
+				Object value = dataMap.get("value");
+				if(value!=null && !value.equals(dataMap.get("oldValue"))){
+					System.err.println(dataMap);
+					Map col_aliasMap = (Map) col_alias.get(k2);
+					System.err.println(col_aliasMap);
+					String col_table_name = (String) col_aliasMap. get("col_table_name");
+					Map<String, Object> updateMap = new HashMap<String, Object>();
+					updateMap.put("data_id", dataMap.get("id"));
+					updateMap.put("value", value);
+					System.err.println(updateMap);
+					if("integer".equals(col_table_name)){
+						db1ParamJdbcTemplate.update(sqlIntegerUpdate, updateMap);
+					}else
+					if("string".equals(col_table_name)){
+						db1ParamJdbcTemplate.update(sqlStringUpdate, updateMap);
+					}
 				}
 			}
 		}
