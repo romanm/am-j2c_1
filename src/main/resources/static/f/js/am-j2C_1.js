@@ -47,7 +47,8 @@ function initI2c($scope, $http, $timeout){
 				}, this.autoSaveTextTypingPause);
 			}
 			,fn_httpSave:function(){
-				$http.post('/r/table/save', {data:this.data, col_alias:$scope.tableSelect.col_alias}).then(function(response) {
+//				$http.post('/r/table/save', {data:this.data, col_alias:$scope.tableSelect.col_alias}).then(function(response) {
+				$http.post('/r/table/save', {data:this.data, col_alias:$scope.col_alias}).then(function(response) {
 					console.log('/r/table/save');
 					console.log(response.data);
 				});
@@ -90,6 +91,12 @@ app.controller('J2CCtrl', function($scope, $http, $timeout) {
 	$http.get(urls[0]).then(function(response) {
 		$scope.tablesSelect = response.data;
 		console.log($scope.tablesSelect);
+		$scope.tableSelect = {};
+		addColAlias({
+			tablename:{
+				col_table_name:'string'
+			}
+		});
 	});
 
 	console.log(urls[1]);
@@ -102,10 +109,23 @@ app.controller('J2CCtrl', function($scope, $http, $timeout) {
 	$http.get(urls[2]).then(function(response) {
 		$scope.tableSelect = response.data;
 		console.log($scope.tableSelect);
-		$scope.col_alias = response.data.col_alias;
-		console.log($scope.col_alias);
+		addColAlias(response.data.col_alias);
 	});
 
-	
-	
+	function addColAlias(ca){
+//		$scope.col_alias = response.data.col_alias;
+		if(!$scope.col_alias)
+			$scope.col_alias = ca;
+		else {
+			angular.forEach(ca, function(val, key) {
+//				console.log(key)
+//				console.log(val)
+				$scope.col_alias[key] = val;
+			});
+			console.log($scope.col_alias);
+		}
+
+
+	}
+
 });

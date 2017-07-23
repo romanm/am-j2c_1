@@ -22,6 +22,7 @@ public class DbRest {
 
 	private @Value("${sql.integer.update}") String sqlIntegerUpdate;
 	private @Value("${sql.string.update}") String sqlStringUpdate;
+
 	@PostMapping("/r/table/save")
 	public @ResponseBody Map<String, Object> tableSave(
 			@RequestBody Map<String, Object> dbSaveObj
@@ -91,6 +92,8 @@ public class DbRest {
 	@GetMapping(value = "/r/tables/select")
 	public @ResponseBody Map<String, Object>  tablesSelect() {
 		Map<String, Object> map = new HashMap<String, Object>();
+		System.err.println("/r/tables/select");
+		System.err.println(sqlTablesSelect);
 		addListWithName("tablesSelect", sqlTablesSelect, map);
 		return map;
 	}
