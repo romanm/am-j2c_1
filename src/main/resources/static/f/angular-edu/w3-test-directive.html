@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<body ng-app="myApp">
+
+	<w3-test-directive></w3-test-directive>
+	OR
+	<div w3-test-directive></div>
+
+	<script>
+		var app = angular.module("myApp", []);
+		console.log(app);
+		app.directive("w3TestDirective", function() {
+			return {
+				templateUrl : '/f/angular-edu/w3-test-directive-body.html'
+			};
+		});
+	</script>
+
+</body>
+
+</html>

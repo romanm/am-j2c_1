@@ -78,7 +78,8 @@ function initI2c($scope, $http, $timeout){
 }
 
 var app = angular.module('j2CApp', []);
-app.controller('J2CCtrl', function($scope, $http, $timeout) {
+app.controller('J2CCtrl', function($scope, $http, $timeout, $compile) {
+	init_algoritmedjs($scope, $http, $timeout, $compile);
 	initI2c($scope, $http, $timeout);
 	$scope.tableTable= {
 		tablename:'Таблиця'

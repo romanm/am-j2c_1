@@ -6,12 +6,15 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
  -->
 <link rel="stylesheet" href="/f/css/w3.css">
-<script src="/webjars/angularjs/1.6.4/angular.min.js"></script>
+<script src="/webjars/angularjs/1.6.6/angular.min.js"></script>
+<script src="/f/js/algoritmed.js"></script>
 <script src="/f/js/am-j2C_1.js"></script>
 <body>
 
 	<div class="w3-container">
-		<h1>AM j2C_1</h1>
+		<h1>
+			<a href="/"> AM j2C_1</a>
+		</h1>
 		<div class="w3-row-padding">
 			<div class="w3-third ">
 				<div class="w3-card-2">
@@ -36,16 +39,31 @@
 			Full Name: {{firstName + " " + lastName}}
 		</div>
 -->
-		<div>
-			<header class="w3-tiny w3-light-gray"> дерево задач конфігуратора
-			</header>
-			<div ng-repeat="(k,v) in j2C.treeObjConfig">
-				<div class="w3-hover-gray" ng-click="v.open=!v.open">{{k}}:</div>
-				<div ng-if="v.open" ng-repeat="(k2,v2) in v">
-					<div ng-if="k2!='open'" class="w3-hover-gray">- {{k2}}</div>
+		<div class="w3-row-padding">
+			<div class="w3-third ">
+				<header class="w3-tiny w3-light-gray"> дерево задач
+					конфігуратора </header>
+				<div ng-repeat="(k,v) in j2C.treeObjConfig">
+					<div class="w3-hover-gray" ng-click="v.open=!v.open">{{k}}:</div>
+					<div ng-if="v.open" ng-repeat="(k2,v2) in v">
+						<div ng-if="k2!='open'" class="w3-hover-gray">- {{k2}}</div>
+					</div>
 				</div>
 			</div>
+			<div class="w3-third ">
+				{{algoritmed.run({sample001:'/f/algoritmed/sample001/helloworld.json'})}}
+				<header class="w3-tiny w3-light-gray">
+					algoritmed/sample001/helloworld </header>
+				<div id="sample001" ng-repeat="o in algoritmed.programs">
+				</div>
+				<div ng-repeat="o in algoritmed.programs">
+				o=
+				{{o}}
+				</div>
+			</div>
+			<div class="w3-third "></div>
 		</div>
+
 	</div>
 
 </body>
