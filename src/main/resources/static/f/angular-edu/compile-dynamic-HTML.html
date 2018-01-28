@@ -4,18 +4,50 @@
 <head>
 <script src="/webjars/angularjs/1.6.6/angular.js"></script>
 <script src="compile-dynamic-HTML.js"></script>
+<link rel="stylesheet" href="/f/css/w3.css">
 </head>
 
 <body>
-	<h1><a href="/">/</a> Compile dynamic HTML</h1>
-	<h2>GUI</h2>
-	<div ng-controller="Controller">
-		<textarea ng-model="programs.html"></textarea>
-			<div
-				amd-run="{programName:'p001'
-			, html:programs.html
-			, htmlUrl:'/f/angular-edu/compile-include-HTML.html'
-		}"></div>
+	<div ng-controller="Controller" class="w3-container"
+		style="max-width: 850px; margin-left: 10px;">
+		<h1>
+			<a href="/">/</a> Compile dynamic HTML
+		</h1>
+		<h2>GUI</h2>
+		<div class="w3-row">
+			<div class="w3-half w3-container">
+				<textarea ng-model="programs.html" style="width: 100%"></textarea>
+			</div>
+			<div class="w3-half w3-container w3-card">
+				<div id="p001"
+					amd-run="{programName:'p001'
+					, html:programs.html
+					, htmlUrl:'/f/angular-edu/compile-include-HTML.html'
+				}"></div>
+				--
+				<div id="q002"
+					amd-run="{programName:'q002'
+					, html:programs.html
+					, htmlUrl:'/f/angular-edu/compile-include-HTML.html'
+				}"></div>
+			</div>
+		</div>
+		<h2>Println: Hello World!</h2>
+		<div class="w3-row">
+			<div class="w3-half w3-container">
+				<div class="w3-card">
+					<div ng-repeat="amdRun in algoritmed.amdRuns">
+						{{amdRun}}
+						<div id="amdRun_{{$index}}" amd-run="amdRun"></div>
+					</div>
+					a3
+				</div>
+			</div>
+			<div class="w3-half">
+				<div class="w3-card">a2</div>
+			</div>
+		</div>
+		<div>a1</div>
 		<!-- 
 		<div amd-run="{programName:'p001',html:programs.html}"></div>
 		 -->
