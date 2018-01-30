@@ -20,7 +20,6 @@ app.directive('amdPrintln', function ($compile, $http) {
 			scope.$watch(attrs['amdPrintln'], function(obj_key) {
 				var program_init = scope.algoritmed.inits[obj_key];
 				if(program_init.isObject()){
-					console.log("-----------------11-------");
 					angular.forEach(program_init, function(v, k){
 //						if(key_words[k]){}else
 						if(k.indexOf('text_')==0){
@@ -28,14 +27,9 @@ app.directive('amdPrintln', function ($compile, $http) {
 						}
 					})
 					angular.forEach(program_init.add_fn, function(v, k){
-						console.log(k)
-						console.log(v)
 						program_init[v]=fn_lib[v];
 						ele.html(program_init[v]());
 					})					
-					console.log(program_init);
-					if(program_init.fn_sum)
-					console.log(program_init.fn_sum());
 				}else
 				if((typeof program_init) == 'string'){
 					ele.html(program_init);
@@ -51,7 +45,6 @@ app.directive('amdRun', function ($compile, $http) {
 		scope: true,
 		link: function (scope, ele, attrs) {
 			scope.$watch(attrs['amdRun'], function(program_init) {
-				console.log(ele[0].id)
 				if(program_init.programPath){
 					//read a program 1 - to run program
 					$http.get(program_init.programPath).then(function(response){
@@ -62,12 +55,10 @@ app.directive('amdRun', function ($compile, $http) {
 								var amdRun_pr_uri = v.source_path;
 								if(!v.source_path)
 									amdRun_pr_uri = '/f/algoritmed/lib/'+k1+'.html'
-//								console.log(amdRun_pr_uri)
 								//read a program 2 - from library level 1 in run program
 								$http.get(amdRun_pr_uri).then(function(response) {
 									var pr = response.data;
 									ele.html(pr);
-									console.log(k1);
 									var id2 = ele[0].id+'__'+k1;
 									scope.algoritmed.inits[id2]=v;
 									if(init_amd_directive[k1])
@@ -84,7 +75,6 @@ app.directive('amdRun', function ($compile, $http) {
 					if(!scope.algoritmed.inits[program_init.programName]){
 						scope.algoritmed.inits[program_init.programName]
 						= program_init;
-						console.log(scope.algoritmed)
 					}
 				}
 				if(program_init.html){
@@ -126,22 +116,14 @@ var key_words = {
 }
 var init_amd_directive = {
 	add_fn:function(scope, id2){
-		var modelObj = "algoritmed.inits['"+id2+"']";
 		var program_init = scope.algoritmed.inits[id2];
-		console.log(program_init)
 		angular.forEach(program_init.add_fn, function(v, k){
-			console.log(k)
-			console.log(v)
 			program_init[v]=fn_lib[v];
 		})					
 	}
 	,form:function(scope, ele, id2){
-		console.log(ele)
-		console.log(id2)
 		var pr3 = ele[0].children[1-ele[0].children.length];
-		console.log(pr3)
 		var modelObj = "algoritmed.inits['"+id2+"']";
-		console.log(modelObj)
 		angular.forEach(pr3.children, function(v, k){
 			if(v.getAttribute('am-bind')){
 				v.setAttribute('ng-bind',modelObj+"."+v.getAttribute('am-bind'));
@@ -149,7 +131,6 @@ var init_amd_directive = {
 			if(v.getAttribute('am-model')){
 				v.setAttribute('ng-model',modelObj+"['"+v.getAttribute('am-model')+"']");
 			}
-			console.log(k)
 		});
 		this.add_fn(scope, id2);
 	}
