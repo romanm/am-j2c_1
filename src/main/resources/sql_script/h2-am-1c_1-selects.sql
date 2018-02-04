@@ -5,6 +5,9 @@ SELECT b.*,doc_type FROM docbody b, (
 SELECT program.*, dty.doctype doc_type FROM doc program, doctype dty WHERE program.doctype=dty.doctype_id AND dty.parent_id=9
 ) x WHERE doc_id=docbody_id
 
+-- Зчитати програмні директорії
+SELECT * FROM doc dFolder, string dirName WHERE doc_id=string_id AND doctype=10
+
 -- Перевірка на програмний файл
 SELECT program.*, dty.doctype doc_type FROM doc program, doctype dty WHERE program.doctype=dty.doctype_id AND dty.parent_id=9
 

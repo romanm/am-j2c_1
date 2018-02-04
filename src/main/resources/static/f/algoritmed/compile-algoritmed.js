@@ -124,28 +124,31 @@ var read_sql_with_param = function($http, params,fn, fn_error){
 }
 
 function ProgramGUI(scope, $http) {
+	this.program_folder = {
+			programGUI:this
+			,read : function(response){
+				if(!this.programGUI.scope.program_folder)
+					this.programGUI.scope.program_folder = {};
+				this.programGUI.scope.program_folder.list = response.data.list;
+				this.programGUI.scope.program_folder.click = function(pf){
+					console.log(pf)
+					console.log(pf.doc_id)
+				};
+			}
+			,http_get : function(){
+				var program_folder = this;
+				read_sql_with_param($http, {sql:'sql.program_folder.select'}, function(response){
+					program_folder.read(response);
+				});
+			}
+	}
 	this.scope = scope;
-	this.read_program_folder = function(response){
-		if(!this.scope.program_folder)
-			this.scope.program_folder = {};
-		this.scope.program_folder.list = response.data.list;
-		console.log(this.scope.program_folder);
-		this.scope.program_folder.click = function(pf){
-			console.log(pf)
-		};
-	}
-	this.http_get_program_folder = function(){
-		thisObj = this;
-		read_sql_with_param($http, {sql:'sql.program_folder.select'},function(response){
-			thisObj.read_program_folder(response);
-		});
-	}
 }
 
 app.controller('ControllerDB', function($scope, $http) {
 	console.log('-------ControllerDB--------')
 	programGUI = new ProgramGUI($scope, $http);
-	programGUI.http_get_program_folder();
+	programGUI.program_folder.http_get();
 });
 
 app.controller('Controller', function($scope, $http) {
