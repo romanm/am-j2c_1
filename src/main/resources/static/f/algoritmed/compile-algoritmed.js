@@ -124,23 +124,40 @@ var read_sql_with_param = function($http, params,fn, fn_error){
 }
 
 function ProgramGUI(scope, $http) {
+	this.program_files = {
+		http_get : function(prFolder){
+			console.log(prFolder)
+			var program_files = this;
+			read_sql_with_param($http, {sql:'sql.program_files.select',folderId:prFolder.doc_id}, function(response){
+				program_files.init(response);
+			});
+		}
+		,init : function(response){
+			console.log(response.data)
+			console.log(response.data.list[0])
+			console.log(response.data.list[0].docbody)
+			var response_docbody = JSON.parse(response.data.list[0].docbody);
+			console.log(response_docbody)
+		}
+		,programGUI:this
+	}
 	this.program_folder = {
-			programGUI:this
-			,read : function(response){
-				if(!this.programGUI.scope.program_folder)
-					this.programGUI.scope.program_folder = {};
-				this.programGUI.scope.program_folder.list = response.data.list;
-				this.programGUI.scope.program_folder.click = function(pf){
-					console.log(pf)
-					console.log(pf.doc_id)
-				};
-			}
-			,http_get : function(){
+			http_get : function(){
 				var program_folder = this;
 				read_sql_with_param($http, {sql:'sql.program_folder.select'}, function(response){
-					program_folder.read(response);
+					program_folder.init(response);
 				});
 			}
+			,init : function(response){
+				var programGUI = this.programGUI;
+				if(!programGUI.scope.program_folder)
+					programGUI.scope.program_folder = {};
+				programGUI.scope.program_folder.list = response.data.list;
+				programGUI.scope.program_folder.click = function(pf){
+					programGUI.program_files.http_get(pf);
+				};
+			}
+			,programGUI:this
 	}
 	this.scope = scope;
 }
