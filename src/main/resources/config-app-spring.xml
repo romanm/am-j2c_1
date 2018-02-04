@@ -21,14 +21,18 @@
 		<constructor-arg ref="dataSourceDb1" />
 	</bean>
 	
+	<!-- 
 	<bean id="propertyConfigurer"
+	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
-				<value>classpath:application.properties</value>
-				<value>classpath:sql.properties</value>
+				<value>classpath:/application.properties</value>
+				<value>classpath:/sql.properties</value>
 			</list>
 		</property>
 	</bean>
+	@PropertySource("classpath:sql.properties")
+	 -->
 	
 </beans>

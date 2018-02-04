@@ -12,17 +12,24 @@
 <script src="/f/js/am-j2C_1.js"></script>
 <body>
 
-	<div class="w3-container">
-		<div class="w3-row-padding">
+	<div class="w3-container"
+	style="max-width: 950px; margin-left: 10px;"
+	>
+		<div class="w3-row-padding w3-border-bottom">
 			<div class="w3-third ">
 				<h1>
 					<a href="/"> AM j2C_1</a>
 				</h1>
 			</div>
 			<div class="w3-twothird ">
-				<p>
-					Links: <a href="/f/angular-edu/compile-dynamic-HTML.html">
-						algoritmed: Hello World! </a>
+				<p class="w3-small">
+					Links::
+					<b class="w3-tiny">AlgoritmedJS:</b>
+					 <a href="/f/angular-edu/compile-dynamic-HTML.html">
+						 Hello World! </a>
+						|
+					 <a href="/f/angular-edu/am-js-hello-world-db.html">
+						 To/From DB Hello World! </a>
 				</p>
 			</div>
 		</div>
@@ -55,7 +62,9 @@
 				<header class="w3-tiny w3-light-gray"> дерево задач
 					конфігуратора </header>
 				<div ng-repeat="(k,v) in j2C.treeObjConfig">
-					<div class="w3-hover-gray" ng-click="v.open=!v.open">{{k}}:</div>
+					<div class="w3-hover-gray" ng-click="v.open=!v.open">{{k}}:
+					<span ng-if="oKeys(v).length>0">-</span>
+					</div>
 					<div ng-if="v.open" ng-repeat="(k2,v2) in v">
 						<div ng-if="k2!='open'" class="w3-hover-gray">- {{k2}}</div>
 					</div>

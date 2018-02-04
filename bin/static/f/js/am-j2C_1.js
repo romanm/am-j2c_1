@@ -130,3 +130,4 @@ app.controller('J2CCtrl', function($scope, $http, $timeout, $compile) {
 	}
 
 });
+

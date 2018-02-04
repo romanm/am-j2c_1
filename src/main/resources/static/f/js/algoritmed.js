@@ -57,4 +57,7 @@ function init_algoritmedjs($scope, $http, $timeout, $compile){
 			}
 		}
 	}
+	$scope.oKeys=function(o){
+		return Object.keys(o);
+	}
 }

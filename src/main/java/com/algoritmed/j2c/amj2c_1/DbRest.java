@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,11 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-public class DbRest {
-	private static final Logger logger = LoggerFactory.getLogger(DbRest.class);
+public class DbRest extends DbCommon{
 
-	private @Value("${sql.integer.update}") String sqlIntegerUpdate;
-	private @Value("${sql.string.update}") String sqlStringUpdate;
+//	private @Value("${sql.integer.update}") String sqlIntegerUpdate;
+//	private @Value("${sql.string.update}") String sqlStringUpdate;
 
 	@PostMapping("/r/table/save")
 	public @ResponseBody Map<String, Object> tableSave(
@@ -48,26 +45,32 @@ public class DbRest {
 					updateMap.put("data_id", dataMap.get("id"));
 					updateMap.put("value", value);
 					System.err.println(updateMap);
+					db1ParamJdbcTemplate.update(env.getProperty("sql."+ col_table_name+ ".update"), updateMap);
+					/*
 					if("integer".equals(col_table_name)){
 						db1ParamJdbcTemplate.update(sqlIntegerUpdate, updateMap);
 					}else
 					if("string".equals(col_table_name)){
 						db1ParamJdbcTemplate.update(sqlStringUpdate, updateMap);
 					}
+					 * */
 				}
 			}
 		}
 		return dbSaveObj;
 	}
 
-	private @Value("${sql.join_columns.select}") String sqlJoinColumnsSelect;
+//	private @Value("${sql.join_columns.select}") String sqlJoinColumnsSelect;
 	private @Value("${sql.table.select}") String sqlTableSelect;
 	@GetMapping(value = "/r/table/select")
 	public @ResponseBody Map<String, Object>  tableSelect() {
 		Map<String, Object> map		= new HashMap<String, Object>();
 		Map<Integer, Object> col_aliasMap	= new HashMap<Integer, Object>();
 		List<Map<String, Object>> listColumns = 
-				db1JdbcTemplate.queryForList(sqlJoinColumnsSelect);
+				db1JdbcTemplate.queryForList(env.getProperty("sql.join_columns.select"));
+		System.err.println("-------------------78-----");
+		System.err.println(env.getProperty("sql.join_columns.select"));
+		System.err.println(listColumns);
 //			addListWithName("joinColumnsSelect", sqlJoinColumnsSelect, map);
 		String joins = "", columns = "";
 		for (Map<String, Object> map2 : listColumns) {
@@ -111,8 +114,5 @@ public class DbRest {
 		map.put(name, queryForList);
 		return queryForList;
 	}
-
-	protected @Autowired JdbcTemplate db1JdbcTemplate;
-	protected @Autowired NamedParameterJdbcTemplate db1ParamJdbcTemplate;
 
 }

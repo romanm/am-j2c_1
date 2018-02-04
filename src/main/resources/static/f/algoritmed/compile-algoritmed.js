@@ -113,6 +113,41 @@ app.directive('amdRun', function ($compile, $http) {
 	};
 });
 
+var read_sql_with_param = function($http, params,fn, fn_error){
+	var uri = '/r/read_sql_with_param';
+	console.log(uri);
+	if(!fn_error){
+		$http.get(uri, {params:params}).then(fn);
+	}else{
+		$http.get(uri, {params:params}).then(fn, fn_error);
+	}
+}
+
+function ProgramGUI(scope, $http) {
+	this.scope = scope;
+	this.read_program_folder = function(response){
+		if(!this.scope.program_folder)
+			this.scope.program_folder = {};
+		this.scope.program_folder.list = response.data.list;
+		console.log(this.scope.program_folder);
+		this.scope.program_folder.click = function(pf){
+			console.log(pf)
+		};
+	}
+	this.http_get_program_folder = function(){
+		thisObj = this;
+		read_sql_with_param($http, {sql:'sql.program_folder.select'},function(response){
+			thisObj.read_program_folder(response);
+		});
+	}
+}
+
+app.controller('ControllerDB', function($scope, $http) {
+	console.log('-------ControllerDB--------')
+	programGUI = new ProgramGUI($scope, $http);
+	programGUI.http_get_program_folder();
+});
+
 app.controller('Controller', function($scope, $http) {
 	$scope.format = 'M/d/yy h:mm:ss a';
 	$scope.amdRunObj = function() {
