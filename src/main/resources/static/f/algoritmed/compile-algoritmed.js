@@ -65,6 +65,7 @@ function read_am_html_source(scope, ele, v, k, $compile, $http){
 		var amdRun_pr_uri = v.source_path;
 		if(!v.source_path)
 			amdRun_pr_uri = '/f/algoritmed/lib/'+k1+'.html'
+			console.log(amdRun_pr_uri)
 		//read a program 2 - from library level 1 in run program
 		$http.get(amdRun_pr_uri).then(function(response) {
 			var pr = response.data;
@@ -98,6 +99,11 @@ app.directive('amdRun', function ($compile, $http) {
 				if(program_init.amProgramPath){
 					//read a program 1 - to run program
 					read_am_json_source(scope, ele, program_init.amProgramPath, $compile, $http);
+				}else
+				if(program_init.programFile){
+					angular.forEach(program_init.programFile, function(v, k){
+						read_am_html_source(scope, ele, v, k, $compile, $http);
+					});
 				}else
 				if(program_init.programId){
 					if(!scope.algoritmed.inits[program_init.programId]){
@@ -136,34 +142,40 @@ function ProgramGUI(scope, $http) {
 			console.log(response.data)
 			console.log(response.data.list[0])
 			console.log(response.data.list[0].docbody)
-			var response_docbody = JSON.parse(response.data.list[0].docbody);
-			console.log(response_docbody)
+			if(!programGUI.scope.program_files)
+				programGUI.scope.program_files = {};
+			programGUI.scope.program_files.list = response.data.list;
+			angular.forEach(programGUI.scope.program_files.list, function(v, k){
+				v.programFile = JSON.parse(v.docbody);
+				console.log(v.programFile);
+			});
 		}
 		,programGUI:this
 	}
 	this.program_folder = {
-			http_get : function(){
-				var program_folder = this;
-				read_sql_with_param($http, {sql:'sql.program_folder.select'}, function(response){
-					program_folder.init(response);
-				});
-			}
-			,init : function(response){
-				var programGUI = this.programGUI;
-				if(!programGUI.scope.program_folder)
-					programGUI.scope.program_folder = {};
-				programGUI.scope.program_folder.list = response.data.list;
-				programGUI.scope.program_folder.click = function(pf){
-					programGUI.program_files.http_get(pf);
-				};
-			}
-			,programGUI:this
+		http_get : function(){
+			var program_folder = this;
+			read_sql_with_param($http, {sql:'sql.program_folder.select'}, function(response){
+				program_folder.init(response);
+			});
+		}
+		,init : function(response){
+			var programGUI = this.programGUI;
+			if(!programGUI.scope.program_folder)
+				programGUI.scope.program_folder = {};
+			programGUI.scope.program_folder.list = response.data.list;
+			programGUI.scope.program_folder.click = function(pf){
+				programGUI.program_files.http_get(pf);
+			};
+		}
+		,programGUI:this
 	}
 	this.scope = scope;
 }
 
 app.controller('ControllerDB', function($scope, $http) {
 	console.log('-------ControllerDB--------')
+	$scope.algoritmed = { programs:{} ,htmls:{} ,dbs:{} ,inits:{} }
 	programGUI = new ProgramGUI($scope, $http);
 	programGUI.program_folder.http_get();
 });

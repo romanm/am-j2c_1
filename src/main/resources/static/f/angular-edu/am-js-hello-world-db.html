@@ -18,14 +18,21 @@
 				<div class=" w3-border">
 					<header class="w3-tiny w3-light-gray"> Директорії програм:
 					</header>
-					<div 
-					class="w3-hover-gray"
-					ng-click="program_folder.click(pf)"
-					ng-repeat="pf in program_folder.list">{{pf.value}}</div>
+					<div class="w3-hover-gray" ng-click="program_folder.click(pf)"
+						ng-repeat="pf in program_folder.list">{{pf.value}}</div>
 				</div>
 			</div>
-			<div class="w3-third ">a2</div>
-			<div class="w3-third ">a3</div>
+			<div class="w3-third">
+				<header class="w3-tiny w3-light-gray"> Файл програми: </header>
+				<div ng-repeat="amdRun in program_files.list" class="w3-border">
+					<textarea ng-model="amdRun.docbody" style="width: 100%"></textarea>
+				</div>
+			</div>
+			<div class="w3-third ">
+				<div ng-repeat="amdRun in program_files.list">
+					<div amd-run="amdRun"></div>
+				</div>
+			</div>
 		</div>
 	</div>
 </body>
