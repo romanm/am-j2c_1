@@ -13,24 +13,35 @@
 		<h1 class="w3-border-bottom">
 			<a href="/">/</a> AlgoritmedJS - Hello World! to and from DB.
 		</h1>
-		<div class="w3-row-padding w3-border-bottom">
+		<div class="w3-row w3-border-bottom">
 			<div class="w3-third">
-				<div class=" w3-border">
+				<div class="w3-border">
 					<header class="w3-tiny w3-light-gray"> Директорії програм:
 					</header>
 					<div class="w3-hover-gray" ng-click="program_folder.click(pf)"
 						ng-repeat="pf in program_folder.list">{{pf.value}}</div>
 				</div>
 			</div>
-			<div class="w3-third">
-				<header class="w3-tiny w3-light-gray"> Файл програми: </header>
-				<div ng-repeat="amdRun in program_files.list" class="w3-border">
-					<textarea ng-model="amdRun.docbody" style="width: 100%"></textarea>
-				</div>
-			</div>
-			<div class="w3-third ">
-				<div ng-repeat="amdRun in program_files.list">
-					<div amd-run="amdRun"></div>
+			<div class="w3-twothird">
+				<div class="w3-row-padding w3-border-bottom"
+				ng-repeat="amdRun in program_files.list"
+				>
+					<div class="w3-half">
+						<header class="w3-tiny w3-light-gray"> Файл програми:
+						f_{{amdRun.docbody_id}}.{{amdRun.doc_type}}
+						 </header>
+						<div n1g-repeat="amdRun in program_files.list" class="w3-border">
+						</div>
+							<textarea ng-model="amdRun.docbody" style="width: 100%"></textarea>
+					</div>
+					<div class="w3-half ">
+						<header class="w3-tiny w3-light-gray"> Виконання програми: 
+						f_{{amdRun.docbody_id}}.{{amdRun.doc_type}}
+						</header>
+						<div n1g-repeat="amdRun in program_files.list">
+						</div>
+							<div amd-run="amdRun"></div>
+					</div>
 				</div>
 			</div>
 		</div>
