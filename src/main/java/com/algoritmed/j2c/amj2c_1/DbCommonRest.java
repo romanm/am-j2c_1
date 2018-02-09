@@ -26,14 +26,25 @@ public class DbCommonRest extends DbCommon {
 		logger.info("------43------/read_sql_with_param"
 				+ "\n" + map
 				);
-		read_select(map, env.getProperty(sql), null);
+		read_select(map, env.getProperty(sql));
 //		List<Map<String, Object>> list = db1ParamJdbcTemplate.queryForList(env.getProperty(sql_command), map);
 //		map.put("list", list);
 		return map;
 	}
 	
-	protected void read_select(Map<String, Object> data, String sql_command, Integer i) {
-		String nr = null==i?"":(""+i);
+	protected void read_select(Map<String, Object> data, String sql_command) {
+		if(sql_command.contains(";")) {
+			int i = 0;
+			for (String sql : sql_command.split(";")) {
+				System.err.println("------------39------------ "+i);
+				System.err.println(sql);
+				List<Map<String, Object>> list = db1ParamJdbcTemplate.queryForList(sql, data);
+				data.put("list_"+i, list);
+				System.err.println(list);
+				i++;
+			}
+			
+		}else
 		if(sql_command.indexOf("SELECT 'docbody' datatype")==0) {
 			List<Map<String, Object>> docbodyList = db1ParamJdbcTemplate.queryForList(sql_command, data);
 			if(docbodyList.size()>0) {
@@ -41,11 +52,11 @@ public class DbCommonRest extends DbCommon {
 				String docbodyStr = (String) docbodyMap.get("docbody");
 				Map<String, Object> docbodyStr2Map = stringToMap(docbodyStr);
 				docbodyMap.put("docbody", docbodyStr2Map);
-				data.put("docbody"+nr, docbodyMap);
+				data.put("docbody", docbodyMap);
 			}
 		}else{
 			List<Map<String, Object>> list = db1ParamJdbcTemplate.queryForList(sql_command, data);
-			data.put("list"+nr, list);
+			data.put("list", list);
 		}
 	}
 	
