@@ -62,31 +62,21 @@ public class DbRest extends DbCommon{
 	@GetMapping(value = "/r/table/select")
 	public @ResponseBody Map<String, Object>  tableSelect() {
 		Map<String, Object> map		= new HashMap<String, Object>();
-		Map<Integer, Object> col_aliasMap	= new HashMap<Integer, Object>();
+		
 		System.err.println("-------------------78-----");
 		System.err.println(env.getProperty("sql.join_columns.select"));
+		
 		List<Map<String, Object>> listColumns = 
 				db1JdbcTemplate.queryForList(env.getProperty("sql.join_columns.select"));
-		System.err.println(listColumns);
-//			addListWithName("joinColumnsSelect", sqlJoinColumnsSelect, map);
-		String joins = "", columns = "";
-		for (Map<String, Object> map2 : listColumns) {
-			Integer cln_id = (Integer) map2.get("cln_id");
-			joins += " " + map2.get("add_joins");
-			columns += " " + map2.get("add_columns");
-//			String col_alias = (String) map2.get("col_alias");
-//			String col_table_name = (String) map2.get("col_table_name");
-//			HashMap<Object, Object> m = new HashMap<>();
-			map2.remove("add_joins");
-			map2.remove("add_columns");
-			col_aliasMap.put(cln_id, map2);
-		}
-		map.put("col_alias", col_aliasMap);
-		String sqlTableSelect2 = sqlTableSelect.replace(":add_joins", joins).replace(":add_columns", columns);
+		
+		mapSqlJoins(map, listColumns);
+
+		String sqlTableSelect2 = sqlTableSelect.replace(":add_joins", ""+map.get("add_joins")).replace(":add_columns", ""+map.get("add_columns"));
 		System.err.println(sqlTableSelect2);
 		addListWithName("tableSelect", sqlTableSelect2, map);
 		return map;
 	}
+
 
 	private @Value("${sql.tables.select}") String sqlTablesSelect;
 	@GetMapping(value = "/r/tables/select")

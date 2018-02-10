@@ -34,16 +34,23 @@ public class DbCommonRest extends DbCommon {
 	
 	protected void read_select(Map<String, Object> data, String sql_command) {
 		if(sql_command.contains(";")) {
-			int i = 0;
+			int i = -1;
 			for (String sql : sql_command.split(";")) {
+				i++;
 				System.err.println("------------39------------ "+i);
+				if(sql.contains(":add_joins")) {
+					sql = sql.replace(":add_joins", ""+data.get("add_joins")).replace(":add_columns", ""+data.get("add_columns"));
+				}
 				System.err.println(sql);
 				List<Map<String, Object>> list = db1ParamJdbcTemplate.queryForList(sql, data);
 				data.put("list_"+i, list);
+				if(sql.contains("add_joins")) {
+					mapSqlJoins(data, list);
+				}
 				System.err.println(list);
-				i++;
 			}
-			
+			data.put("list", data.get("list_"+i));
+			data.remove("list_"+i);
 		}else
 		if(sql_command.indexOf("SELECT 'docbody' datatype")==0) {
 			List<Map<String, Object>> docbodyList = db1ParamJdbcTemplate.queryForList(sql_command, data);
