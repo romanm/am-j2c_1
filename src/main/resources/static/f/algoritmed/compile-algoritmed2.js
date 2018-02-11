@@ -1,11 +1,11 @@
 var app = angular.module('app', []);
 var fn_lib = {};
-var init_am_directive = {};
+var init_am_directive = {ele_v:{}};
 
 app.directive('amdRun', function ($compile, $http) {
 	return {
 		restrict: 'EA',
-		scope: true,
+		scope: false,
 		link: function (scope, ele, attrs) {
 			scope.$watch(attrs['amdRun'], function(program_init) {
 				if(program_init.amProgramPath){
@@ -14,7 +14,16 @@ app.directive('amdRun', function ($compile, $http) {
 				}else
 				if(program_init.programFile){
 					angular.forEach(program_init.programFile, function(v, k){
-						read_am_html_source(scope, ele, v, k, $compile, $http);
+						v.parent=program_init.programFile;
+						if(fn_lib[k]){
+							if('TablesJ2C'==k){
+								var tablesJ2C = new fn_lib.TablesJ2C(scope, $http);
+								tablesJ2C.j2c_tables.http_get(v);
+							}
+						}else
+						if(k.includes("html_")){
+							read_am_html_source(scope, ele, v, k, $compile, $http);
+						}
 					});
 				}else
 				if(program_init.programId){
@@ -37,13 +46,16 @@ function read_am_html_source(scope, ele, v, k, $compile, $http){
 		var amdRun_pr_uri = v.source_path;
 		if(!v.source_path)
 			amdRun_pr_uri = '/f/algoritmed/lib/'+k1+'.html'
-			console.log(amdRun_pr_uri)
+		console.log(amdRun_pr_uri)
 		//read a program 2 - from library level 1 in run program
 		$http.get(amdRun_pr_uri).then(function(response) {
 			var pr = response.data;
 			ele.html(pr);
 			var id2 = ele[0].id+'__'+k1;
+			console.log(k1)
 			scope.algoritmed.inits[id2]=v;
+			if(init_am_directive.ele_v[k1])
+				init_am_directive.ele_v[k1](ele, v);
 			if(init_am_directive[k1])
 				init_am_directive[k1](scope, ele, id2);
 			var pr3 = ele[0].children[1-ele[0].children.length];
