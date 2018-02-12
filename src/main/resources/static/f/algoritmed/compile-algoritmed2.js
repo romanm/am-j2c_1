@@ -40,31 +40,6 @@ app.directive('amdRun', function ($compile, $http) {
 	};
 });
 
-function read_am_html_source(scope, ele, v, k, $compile, $http){
-	if(k.includes("html_")){
-		var k1 = k.replace('html_','');
-		var amdRun_pr_uri = v.source_path;
-		if(!v.source_path)
-			amdRun_pr_uri = '/f/algoritmed/lib/'+k1+'.html'
-		console.log(amdRun_pr_uri)
-		//read a program 2 - from library level 1 in run program
-		$http.get(amdRun_pr_uri).then(function(response) {
-			var pr = response.data;
-			ele.html(pr);
-			var id2 = ele[0].id+'__'+k1;
-			console.log(k1)
-			scope.algoritmed.inits[id2]=v;
-			if(init_am_directive.ele_v[k1])
-				init_am_directive.ele_v[k1](ele, v);
-			if(init_am_directive[k1])
-				init_am_directive[k1](scope, ele, id2);
-			var pr3 = ele[0].children[1-ele[0].children.length];
-			pr3.setAttribute('amd-'+k1,'"'+id2+'"');
-			$compile(ele.contents())(scope);
-		})
-	}
-};
-
 function read_am_json_source(scope, ele, amProgramPath, $compile, $http){
 	$http.get(amProgramPath).then(function(response){
 		var amProgramRun = response.data;
@@ -72,6 +47,30 @@ function read_am_json_source(scope, ele, amProgramPath, $compile, $http){
 			read_am_html_source(scope, ele, v, k, $compile, $http);
 		});
 	});
+};
+
+function read_am_html_source(scope, ele, v, k, $compile, $http){
+	if(k.includes("html_")){
+		var k1 = k.replace('html_','');
+		var amdRun_pr_uri = v.source_path;
+		if(!v.source_path)
+			amdRun_pr_uri = '/f/algoritmed/lib/'+k1+'.html'
+		//read a program 2 - from library level 1 in run program
+		$http.get(amdRun_pr_uri).then(function(response) {
+			var pr = response.data;
+			ele.html(pr);
+			var id2 = ele[0].id+'__'+k1;
+			scope.algoritmed.inits[id2]=v;
+			if(init_am_directive.ele_v[k1])
+				init_am_directive.ele_v[k1](ele, v);
+			else 
+			if(init_am_directive[k1])
+				init_am_directive[k1](scope, ele, id2);
+			var pr3 = ele[0].children[1-ele[0].children.length];
+			pr3.setAttribute('amd-'+k1,'"'+id2+'"');
+			$compile(ele.contents())(scope);
+		})
+	}
 };
 
 app.directive('amdPrintln', function ($compile, $http) {
@@ -102,19 +101,55 @@ app.directive('amdPrintln', function ($compile, $http) {
 	}	};
 });
 
+fn_lib.TablesJ2C = function (scope, $http){
+//console.log('-------TablesJ2C--------');
+this.scope = scope;
+this.j2c_tables = {
+		http_get : function(param){
+			console.log(param)
+			if(param.param.sql.indexOf('.select')<0)
+				param.param.sql = 'sql.'+param.param.sql+'.select';
+			var j2c_tables = this;
+			var read_http_get = function(){
+				read_sql_with_param($http, param.param, function(response){
+					j2c_tables.init(response, param);
+				});
+			}
+			if(!param.after)	read_http_get();
+			else
+				scope.$watch(param.after,function() {
+					if(scope[param.after])
+						read_http_get()
+				});
+		}
+		,init : function(response, param){
+//			console.log(response.data)
+			var scopeObj = param.scopeObj;
+			var tablesJ2C = this.tablesJ2C;
+			if(!tablesJ2C.scope[scopeObj])
+				tablesJ2C.scope[scopeObj] = {};
+			if(init_am_directive.tablesJ2C_init)
+				init_am_directive.tablesJ2C_init(response, param);
+//			console.log(tablesJ2C.scope[scopeObj]);
+		}
+		,tablesJ2C:this
+	}
+}
+
 init_am_directive.add_fn = function(program_init){
 	angular.forEach(program_init.add_fn, function(v, k){
 		program_init[v]=fn_lib[v];
 	})					
 }
 
+// uri_read_sql_with_param -- is rewritable in Controller file by demand 
+var uri_read_sql_with_param = '/r/read_sql_with_param';
 var read_sql_with_param = function($http, params,fn, fn_error){
-	var uri = '/r/read_sql_with_param';
-	console.log(uri);
+	console.log(uri_read_sql_with_param);
 	if(!fn_error){
-		$http.get(uri, {params:params}).then(fn);
+		$http.get(uri_read_sql_with_param, {params:params}).then(fn);
 	}else{
-		$http.get(uri, {params:params}).then(fn, fn_error);
+		$http.get(uri_read_sql_with_param, {params:params}).then(fn, fn_error);
 	}
 }
 

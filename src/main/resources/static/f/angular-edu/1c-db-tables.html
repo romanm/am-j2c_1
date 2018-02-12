@@ -8,12 +8,12 @@
 </head>
 
 <body>
-	<div ng-controller="ControllerDB" class="w3-container"
+	<div ng-controller="ControllerDB" class="w3-container  w3-border-bottom"
 		style="max-width: 950px; margin-left: 10px;">
 		<script src="/f/angular-edu/1c-db-tables-ControllerDB2.js"></script>
-		<h1 class="w3-border-bottom">
-			<a href="/">/</a> Таблиці AM j2C_1
-		</h1>
+
+		<div ng-include="'/f/algoritmed/lib/page.head.html'"></div>
+
 		<div class="w3-row-padding w3-border-bottom">
 			<div class="w3-third w3-card">
 				<div amd-run="programRun.tables"></div>
@@ -27,6 +27,7 @@
 				<div amd-run="programRun.table"></div>
 			</div>
 		</div>
+		<span class="w3-tiny"> > </span>
 	</div>
 </body>
 </html>

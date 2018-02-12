@@ -42,7 +42,7 @@ public class DbRest extends DbCommon{
 					updateMap.put("data_id", dataMap.get("id"));
 					updateMap.put("value", value);
 					System.err.println(updateMap);
-					db1ParamJdbcTemplate.update(env.getProperty("sql."+ col_table_name+ ".update"), updateMap);
+					db2ParamJdbcTemplate.update(env.getProperty("sql."+ col_table_name+ ".update"), updateMap);
 					/*
 					if("integer".equals(col_table_name)){
 						db1ParamJdbcTemplate.update(sqlIntegerUpdate, updateMap);
