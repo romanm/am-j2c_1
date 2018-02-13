@@ -3,17 +3,18 @@ app.controller('ControllerDB', function($scope, $http) {
 	//console.log({ fn_lib:fn_lib , init_am_directive:init_am_directive });
 	
 	init_am_directive.tablesJ2C_init = function(response, param){
-		$scope[param.scopeObj].list = response.data.list;
+		$scope[param.commonArgs.scopeObj].list = response.data.list;
 		if(param.col_keys)
-			$scope[param.scopeObj].col_keys = param.col_keys;
+			$scope[param.commonArgs.scopeObj].col_keys = param.col_keys;
 		else if(response.data.col_keys)
-			$scope[param.scopeObj].col_keys = response.data.col_keys;
+			$scope[param.commonArgs.scopeObj].col_keys = response.data.col_keys;
 	};
-
+	
 	$scope.programRun = {
 		create_tables:{
 			programFile:{
-				TablesJ2C:{scopeObj:'create_tables', param:{sql:'create_tables'}, after:'tables'
+				commonArgs:{scopeObj:'create_tables'}
+				,TablesJ2C:{param:{sql:'create_tables'}, after:'tables'
 					,col_keys:{
 						tablename:'Таблиця'
 						,fieldname:'Колонка'
@@ -25,7 +26,8 @@ app.controller('ControllerDB', function($scope, $http) {
 		}			
 		,tables:{
 			programFile:{
-				TablesJ2C:{scopeObj:'tables', param:{sql:'tables'},col_keys:{
+				commonArgs:{scopeObj:'tables'}
+				,TablesJ2C:{param:{sql:'tables'},col_keys:{
 					col_tablename:'Ім´я таблиці'
 				}}
 				,html_tableJ2C:{}
@@ -33,11 +35,14 @@ app.controller('ControllerDB', function($scope, $http) {
 		}
 		,table:{
 			programFile:{
-				TablesJ2C:{scopeObj:'table', param:{sql:'table'}}
+				commonArgs:{scopeObj:'table'}
+				,TablesJ2C:{param:{sql:'table'}}
 				,html_tableJ2C:{}
 			}
 		}
 	};
+	init_am_directive.init_programRuns($scope.programRun);
+	console.log($scope.programRun)
 	
 	console.log($scope)
 	
@@ -50,24 +55,3 @@ app.controller('ControllerDB', function($scope, $http) {
 	};
 	$scope.algoritmed = {programs:{} ,htmls:{} ,dbs:{} ,inits:{} };
 });
-
-init_am_directive.ele_v.tableJ2C = function(ele, v){
-	var lastChildEle = ele[0].children[1-ele[0].children.length];
-	var scopeObj = v.parent.TablesJ2C[lastChildEle.getAttribute('am-obj')];
-	lastChildEle.setAttribute('ng-repeat','o in ['+scopeObj+']')
-}
-
-	/*
-	var tablesJ2C = new fn_lib.TablesJ2C($scope, $http);
-	tablesJ2C.j2c_tables.http_get({sql:'table'});
-	tablesJ2C.j2c_tables.http_get({sql:'create_tables', after:'tables'
-		,col_keys:{
-			tablename:'Таблиця'
-			,fieldname:'Колонка'
-			,fieldtype:'Тип даних'
-		}
-	});
-	tablesJ2C.j2c_tables.http_get({sql:'tables',col_keys:{
-		col_tablename:'Ім´я таблиці'
-	}});
-	 * */

@@ -1,6 +1,20 @@
 var app = angular.module('app', []);
 var fn_lib = {};
-var init_am_directive = {ele_v:{}};
+var init_am_directive = {
+		ele_v:{}
+		,init_programRuns:function(programRuns){
+			angular.forEach(programRuns, function(v, key_programName){
+				if(!v.programFile.commonArgs)
+					v.programFile.commonArgs = {};
+				if(!v.programFile.commonArgs.scopeObj)
+					v.programFile.commonArgs.scopeObj = key_programName;
+				var commonArgs = v.programFile.commonArgs;
+				angular.forEach(v.programFile, function(v2, key_commandName){
+					v2.commonArgs = commonArgs;
+				});
+			});
+		}
+};
 
 app.directive('amdRun', function ($compile, $http) {
 	return {
@@ -13,18 +27,7 @@ app.directive('amdRun', function ($compile, $http) {
 					read_am_json_source(scope, ele, program_init.amProgramPath, $compile, $http);
 				}else
 				if(program_init.programFile){
-					angular.forEach(program_init.programFile, function(v, k){
-						v.parent=program_init.programFile;
-						if(fn_lib[k]){
-							if('TablesJ2C'==k){
-								var tablesJ2C = new fn_lib.TablesJ2C(scope, $http);
-								tablesJ2C.j2c_tables.http_get(v);
-							}
-						}else
-						if(k.includes("html_")){
-							read_am_html_source(scope, ele, v, k, $compile, $http);
-						}
-					});
+					run_am_program(program_init, scope, $http, ele, $compile);
 				}else
 				if(program_init.programId){
 					if(!scope.algoritmed.inits[program_init.programId]){
@@ -40,6 +43,22 @@ app.directive('amdRun', function ($compile, $http) {
 	};
 });
 
+function run_am_program(program_init, scope, $http, ele, $compile){
+	angular.forEach(program_init.programFile, function(v, k){
+//						console.log(k+' -- '+program_init.programFile.commonArgs.scopeObj)
+		v.parent=program_init.programFile;
+		if(fn_lib[k]){
+			if('TablesJ2C'==k){
+				var tablesJ2C = new fn_lib.TablesJ2C(scope, $http);
+				tablesJ2C.j2c_tables.http_get(v);
+			}
+		}else
+			if(k.includes("html_")){
+				read_am_html_source(scope, ele, v, k, $compile, $http);
+			}
+	});
+}
+
 function read_am_json_source(scope, ele, amProgramPath, $compile, $http){
 	$http.get(amProgramPath).then(function(response){
 		var amProgramRun = response.data;
@@ -54,7 +73,8 @@ function read_am_html_source(scope, ele, v, k, $compile, $http){
 		var k1 = k.replace('html_','');
 		var amdRun_pr_uri = v.source_path;
 		if(!v.source_path)
-			amdRun_pr_uri = '/f/algoritmed/lib/'+k1+'.html'
+			amdRun_pr_uri = '/f/algoritmed/lib/'+k1+'.html';
+		console.log(amdRun_pr_uri)
 		//read a program 2 - from library level 1 in run program
 		$http.get(amdRun_pr_uri).then(function(response) {
 			var pr = response.data;
@@ -101,14 +121,30 @@ app.directive('amdPrintln', function ($compile, $http) {
 	}	};
 });
 
+init_am_directive.ele_v.form_type01 = function(ele, v){
+	var lastChildEle = ele[0].children[1-ele[0].children.length];
+	var scopeObj = v.commonArgs[lastChildEle.getAttribute('am-obj')];
+	var ngRepeat = lastChildEle.getAttribute('ng-repeat');
+	ngRepeat = ngRepeat.replace('scopeObj',scopeObj);
+	lastChildEle.setAttribute('ng-repeat',ngRepeat)
+}
+init_am_directive.ele_v.tableJ2C = function(ele, v){
+	var lastChildEle = ele[0].children[1-ele[0].children.length];
+	var scopeObj = v.commonArgs[lastChildEle.getAttribute('am-obj')];
+	lastChildEle.setAttribute('ng-repeat','o in ['+scopeObj+']')
+}
+
 fn_lib.TablesJ2C = function (scope, $http){
 //console.log('-------TablesJ2C--------');
 this.scope = scope;
 this.j2c_tables = {
 		http_get : function(param){
+			console.log(param.url?param.url:url_read_sql_with_param);
 			console.log(param)
-			if(param.param.sql.indexOf('.select')<0)
-				param.param.sql = 'sql.'+param.param.sql+'.select';
+			if(param.param.sql){
+				if(param.param.sql.indexOf('.select')<0)
+					param.param.sql = 'sql.'+param.param.sql+'.select';
+			}
 			var j2c_tables = this;
 			var read_http_get = function(){
 				read_sql_with_param($http, param.param, function(response){
@@ -124,10 +160,14 @@ this.j2c_tables = {
 		}
 		,init : function(response, param){
 //			console.log(response.data)
-			var scopeObj = param.scopeObj;
+			var scopeObj = param.commonArgs.scopeObj;
 			var tablesJ2C = this.tablesJ2C;
 			if(!tablesJ2C.scope[scopeObj])
 				tablesJ2C.scope[scopeObj] = {};
+			console.log(scopeObj)
+			if(init_am_directive[scopeObj] && init_am_directive[scopeObj].tablesJ2C_init)
+				init_am_directive[scopeObj].tablesJ2C_init(response, param);
+			else
 			if(init_am_directive.tablesJ2C_init)
 				init_am_directive.tablesJ2C_init(response, param);
 //			console.log(tablesJ2C.scope[scopeObj]);
@@ -142,17 +182,22 @@ init_am_directive.add_fn = function(program_init){
 	})					
 }
 
-// uri_read_sql_with_param -- is rewritable in Controller file by demand 
-var uri_read_sql_with_param = '/r/read_sql_with_param';
+// url_read_sql_with_param -- is rewritable in Controller file by demand 
+var url_read_sql_with_param = '/r/read_sql_with_param';
 var read_sql_with_param = function($http, params,fn, fn_error){
-	console.log(uri_read_sql_with_param);
+	var url = params.url?params.url:url_read_sql_with_param;
 	if(!fn_error){
-		$http.get(uri_read_sql_with_param, {params:params}).then(fn);
+		$http.get(url, {params:params}).then(fn);
 	}else{
-		$http.get(uri_read_sql_with_param, {params:params}).then(fn, fn_error);
+		$http.get(url, {params:params}).then(fn, fn_error);
 	}
 }
 
 Object.prototype.isObject = function(){
 	return (''+this).indexOf('Object')>=0;
 };
+
+Object.prototype.objKeys = function(){
+	return Object.keys(this);
+};
+
