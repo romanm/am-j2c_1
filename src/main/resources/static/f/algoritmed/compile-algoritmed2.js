@@ -1,9 +1,12 @@
 var app = angular.module('app', []);
+var app_config = {fn:{}};
 var fn_lib = {};
 var init_am_directive = {
 		ele_v:{}
-		,init_programRuns:function(programRuns){
-			angular.forEach(programRuns, function(v, key_programName){
+		,init_programRuns:function($scope){
+			if(app_config.fn.pages)
+				new app_config.fn.pages($scope).head();
+			angular.forEach($scope.programRun, function(v, key_programName){
 				if(!v.programFile.commonArgs)
 					v.programFile.commonArgs = {};
 				if(!v.programFile.commonArgs.scopeObj)
@@ -16,7 +19,6 @@ var init_am_directive = {
 		}
 };
 init_am_directive.list2map = function(l,o,id_key,key){
-	console.log(l)
 	o['map_'+key] = {};
 	o['list_'+key] = [];
 	angular.forEach(l, function(v, k){
@@ -132,12 +134,26 @@ app.directive('amdPrintln', function ($compile, $http) {
 	}	};
 });
 
+init_am_directive.translate_am_att = function(ele, v){
+	if(ele.hasAttribute('am-link')){
+		var a = document.createElement("a");
+		a.setAttribute('href', v.parent.links[ele.getAttribute('am-link')]);
+		a.innerHTML = ele.innerHTML;
+		ele.innerHTML = a.outerHTML;
+	}
+	if(ele.children)
+		angular.forEach(ele.children, function(ele1, k1){
+			init_am_directive.translate_am_att(ele1, v);
+		});
+}
+
 init_am_directive.ele_v.form_type01 = function(ele, v){
 	var lastChildEle = ele[0].children[1-ele[0].children.length];
+	init_am_directive.translate_am_att(lastChildEle, v);
 	var scopeObj = v.commonArgs[lastChildEle.getAttribute('am-obj')];
 	var ngRepeat = lastChildEle.getAttribute('ng-repeat');
 	ngRepeat = ngRepeat.replace('scopeObj',scopeObj);
-	lastChildEle.setAttribute('ng-repeat',ngRepeat)
+	lastChildEle.setAttribute('ng-repeat',ngRepeat);
 }
 init_am_directive.ele_v.tableJ2C = function(ele, v){
 	var lastChildEle = ele[0].children[1-ele[0].children.length];
@@ -203,6 +219,10 @@ var read_sql_with_param = function($http, params,fn, fn_error){
 		$http.get(url, {params:params}).then(fn, fn_error);
 	}
 }
+
+Object.prototype.isFunction = function(){
+	return typeof this == 'function'
+};
 
 Object.prototype.isObject = function(){
 	return (''+this).indexOf('Object')>=0;

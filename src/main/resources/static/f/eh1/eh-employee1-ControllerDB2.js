@@ -19,7 +19,6 @@ app.controller('ControllerDB', function($scope, $http) {
 		}
 	};
 	run_am_program($scope.programRun.eh_dictionaries, $scope, $http);
-	init_am_directive.init_programRuns($scope.programRun);
 	init_am_directive.eh_dictionaries = {
 		tablesJ2C_init:function(response, param){
 			$scope.eh_dictionaries = response.data;
@@ -39,13 +38,17 @@ app.controller('ControllerDB', function($scope, $http) {
 		$scope[param.commonArgs.scopeObj].docbody = JSON.parse(response.data.list[0].docbody);
 		console.log($scope[param.commonArgs.scopeObj])
 	};
-
+	
 	$scope.page={
 		head:{
 			pageName:'eHealth employee'
+			,headFilePath:'/f/algoritmed/lib/page.head2.html'
 			,headClass:'l5 m6 s8'
 			,headLink:'/f/angular-edu/1c-db-tables.headLink.html'
+			,tabs_key:'hrm'
 		}
 	};
+
+	init_am_directive.init_programRuns($scope);
 	$scope.algoritmed = {programs:{} ,htmls:{} ,dbs:{} ,inits:{} };
 });

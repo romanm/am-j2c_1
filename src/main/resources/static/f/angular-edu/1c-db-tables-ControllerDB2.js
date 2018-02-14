@@ -41,7 +41,7 @@ app.controller('ControllerDB', function($scope, $http) {
 			}
 		}
 	};
-	init_am_directive.init_programRuns($scope.programRun);
+	init_am_directive.init_programRuns($scope);
 	console.log($scope.programRun)
 	
 	console.log($scope)

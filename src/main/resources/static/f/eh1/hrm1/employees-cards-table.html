@@ -1,8 +1,12 @@
 <div am-obj="scopeObj" ng-repeat="employeesCards in [scopeObj]">
 	<table>
 		<tr ng-repeat="employee_id in employeesCards.list_employees">
-			<td>{{employee_id}}</td>
-			<td>a1</td>
+			<td am-link="link_to_employee">{{employee_id}}</td>
+			<td>{{employeesCards.map_employees[employee_id].family_name}},
+				{{employeesCards.map_employees[employee_id].first_name}}
+				{{employeesCards.map_employees[employee_id].second_name}}</td>
+			<td>{{employeesCards.map_user[employee_id].role_sort}}-
+				{{employeesCards.map_user[employee_id].role_note}}</td>
 		</tr>
 	</table>
 </div>
