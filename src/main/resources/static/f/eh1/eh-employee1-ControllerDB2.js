@@ -46,6 +46,6 @@ app.controller('ControllerDB', function($scope, $http) {
 			,headClass:'l5 m6 s8'
 			,headLink:'/f/angular-edu/1c-db-tables.headLink.html'
 		}
-	}
+	};
 	$scope.algoritmed = {programs:{} ,htmls:{} ,dbs:{} ,inits:{} };
 });

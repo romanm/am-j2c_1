@@ -15,6 +15,17 @@ var init_am_directive = {
 			});
 		}
 };
+init_am_directive.list2map = function(l,o,id_key,key){
+	console.log(l)
+	o['map_'+key] = {};
+	o['list_'+key] = [];
+	angular.forEach(l, function(v, k){
+		var id = v[id_key];
+		o['map_'+key][id] = v;
+		o['list_'+key][k] = id;
+	});
+};
+
 
 app.directive('amdRun', function ($compile, $http) {
 	return {
