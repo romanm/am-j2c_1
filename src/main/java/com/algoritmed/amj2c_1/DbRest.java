@@ -1,4 +1,4 @@
-package com.algoritmed.j2c.amj2c_1;
+package com.algoritmed.amj2c_1;
 
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +42,7 @@ public class DbRest extends DbCommon{
 					updateMap.put("data_id", dataMap.get("id"));
 					updateMap.put("value", value);
 					System.err.println(updateMap);
-					db2ParamJdbcTemplate.update(env.getProperty("sql."+ col_table_name+ ".update"), updateMap);
+					db1ParamJdbcTemplate.update(env.getProperty("sql."+ col_table_name+ ".update"), updateMap);
 					/*
 					if("integer".equals(col_table_name)){
 						db1ParamJdbcTemplate.update(sqlIntegerUpdate, updateMap);

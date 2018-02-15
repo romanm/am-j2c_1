@@ -1,4 +1,4 @@
-package com.algoritmed.j2c.amj2c_1;
+package com.algoritmed.amj2c_1;
 
 import java.util.HashMap;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.algoritmed.j2c.amj2c_1;
+package com.algoritmed.amj2c_1;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +13,6 @@ public class DbCommon extends DbCommonSql{
 	protected static final Logger logger = LoggerFactory.getLogger(DbCommon.class);
 
 	protected @Autowired @Qualifier("db1JdbcTemplate") JdbcTemplate db1JdbcTemplate;
-	protected @Autowired  @Qualifier("db1ParamJdbcTemplate") NamedParameterJdbcTemplate db2ParamJdbcTemplate;
+	protected @Autowired  @Qualifier("db1ParamJdbcTemplate") NamedParameterJdbcTemplate db1ParamJdbcTemplate;
 	
 }

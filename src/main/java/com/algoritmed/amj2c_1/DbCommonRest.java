@@ -1,4 +1,4 @@
-package com.algoritmed.j2c.amj2c_1;
+package com.algoritmed.amj2c_1;
 
 import java.util.Map;
 
@@ -20,7 +20,7 @@ public class DbCommonRest extends DbCommon {
 		logger.info("------43------/read_sql_with_param"
 				+ "\n" + map
 				);
-		read_select(map, env.getProperty(sql), db2ParamJdbcTemplate);
+		read_select(map, env.getProperty(sql), db1ParamJdbcTemplate);
 //		List<Map<String, Object>> list = db1ParamJdbcTemplate.queryForList(env.getProperty(sql_command), map);
 //		map.put("list", list);
 		return map;

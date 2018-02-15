@@ -1,4 +1,4 @@
-package com.algoritmed.j2c.amj2c_1.filters;
+package com.algoritmed.amj2c_1.components;
 
 import java.io.IOException;
 
@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UrlFilter implements Filter{
+public class UrlTapFilter implements Filter{
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)

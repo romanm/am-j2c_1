@@ -30,11 +30,11 @@ repositories {
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
+	compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	compile 'org.springframework.boot:spring-boot-starter-jdbc'
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	
 	compile 'org.webjars:angularjs:1.6.6'
 	runtime 'com.h2database:h2'
 	compile 'commons-dbcp:commons-dbcp:1.4'
-	
 }
