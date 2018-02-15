@@ -1,25 +1,26 @@
 <div class="w3-row-padding">
 	<div class="w3-col {{page.head.headClass}} w3-border-bottom"
 	>
-		<h3>
+		<h3 style="margin-top: 1px;margin-bottom: 2px;">
 			<a href="/">/</a> {{page.head.pageName}}
 		</h3>
 	</div>
 	<div class="w3-rest w3-small">
-	
-	<div class="w3-display-container" style="height:57px;">
-	<div class="w3-display-topright">{{page.pageKey()}} a1</div>
-	<div class="w3-display-bottomleft">
-		<span class="w3-border-bottom">&nbsp</span><span
-			ng-repeat="(k,tab_page) in page.head.tabs"
-			ng-class="{
-		'w3-border-bottom':k!=page.pageKey()
-		,'w3-border-top w3-border-left w3-border-right':k==page.pageKey()
-		}">
-			&nbsp <a href="{{tab_page.link}}"> {{tab_page.alias}} </a> &nbsp
-		</span><span class="w3-border-bottom">&nbsp&nbsp</span>
-</div>
-	</div>
-	
+
+	<div class="w3-display-container" style="height:40px;">
+		<div class="w3-display-topright" title="{{page.pageKey()}}">☰</div>
+			<div class="w3-display-bottomleft">
+				<span class="w3-border-bottom">&nbsp</span><span
+					ng-repeat="(k,tab_page) in page.head.tabs"
+					ng-class="{
+	'w3-border-bottom':k!=page.pageKey()
+	,'w3-border-top w3-border-left w3-border-right':k==page.pageKey()
+	}">
+					&nbsp <a href="{{tab_page.link}}"> {{tab_page.alias}} </a>
+					&nbsp
+				</span><span class="w3-border-bottom">&nbsp&nbsp</span>
+			</div>
+		</div>
+
 	</div>
 </div>

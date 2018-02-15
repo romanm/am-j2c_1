@@ -4,16 +4,12 @@ app_config.fn.pages = function($scope){
 			return $scope.programRun.objKeys()[0];
 		}
 		var pageKey = $scope.page.pageKey();
-		console.log(pageKey)
-		console.log($scope.programRun[pageKey])
 		$scope.page.head.pageName = app_config.pages[pageKey].alias; 
-		console.log($scope.page.head.tabs_key)
 		if($scope.page.head.tabs_key){
 			$scope.page.head.tabs={};
 			angular.forEach(app_config.page_head_tabs[$scope.page.head.tabs_key], function(v, k){
 				$scope.page.head.tabs[v]=app_config.pages[v];
 			});
-			console.log($scope.page.head.tabs)
 		}
 	}
 }
