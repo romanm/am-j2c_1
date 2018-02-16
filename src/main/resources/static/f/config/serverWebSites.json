@@ -1,6 +1,7 @@
 {
+
 "info":{
-	"th_template":"eh1-index1"
+	"th_template":"eh1_index1"
 	,"ng_template":"'/f/mvp1/medic/msp2/info/info.html'"
 	,"shortName":"Інформація"
 	,"parent":"home"
